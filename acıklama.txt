@@ -1,0 +1,74 @@
+
+DOCKERFİLE
+
+
+FROM python:alpine
+
+from ile uygulamamızı hangi imajdan oluşturmak istediğimizi giriyoruz alpine imajının içerisinde python entegre olan imajını seçtik ve artık python u ayrıca indirmemiz gerekmiyor.
+
+COPY . /app
+
+bu dizinden uygulamayı kopyaladık 
+
+WORKDIR /app
+
+sonra workdır ile uygulamamıza geçiş yaptık 
+
+RUN pip install -r requirements.txt
+
+PIP, Python paketlerini yüklemenize ve kaldırmanıza olanak sağlayan paket yönetim sistemidir. Bu özellikten faydalanabilmek için Python sürümü en az 3.4 olmalıdır.
+
+EXPOSE 5000
+
+bu oluşturulan dockerfile ın container da up olduğu zaman uygulamamızın 5000 portuyla bağlabılabilir olması için ayarladık. 
+
+CMD python ./app.py
+
+burada cmd komutunu girmemizin amacı ise 
+CMD komutunun asıl amacı bir konteyner içerisinde gerekli olan yazılımı başlatmaktır.
+
+ve dockerfile mız build işlemi için hazır durumda. 
+
+
+İMAGE BUİLD
+
+docker build -t my-image .
+
+docker run -d --name myapp my-image
+
+http://172.17.0.2:5000/  websitenin açıldığını görüyoruzzz.
+
+
+DOCKER HUB
+
+
+docker tag my-image:latest ezhel05/alistirma:pythonapp
+
+ilk önce atmak istediğimiz image ve tag giriyoruz sonra hubtaki kullanıcı adımız sonra repository sonra atıcağımız imagenin hubtaki isminin ne olacağını yazıyoruz
+
+docker push ezhel05/alistirma:pythonapp
+
+sonra ismini belirlediğimiz imageyi push sonra kullanıcı adı sonra repository sonra atıcağımız image.
+
+
+REGİSTRY
+
+docker pull registry
+
+docker run -d -p 5000:5000 --restart always --name registry registry:2
+bu komut ile registry up oluyor
+
+http://127.0.0.1:5000/v2/_catalog
+
+reporysiy ler listelenir
+
+
+docker image tag my-image:latest 127.0.0.1:5000/ilkrepom:latest
+
+image yeni tag verdik durmasını istediğimiz yeri 127.0.0.1:5000 adresini local repository yazdık
+
+docker image push 127.0.0.1:5000/myapp:latest
+
+adrese yeni taglı imajı attık
+
+
